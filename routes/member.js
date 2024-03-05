@@ -3,6 +3,7 @@ const passport = require("passport")
 const LocalStrategy = require("passport-local").Strategy
 const session = require("express-session")
 const express = require("express")
+const ObjectId = require("mongodb").ObjectId
 
 
 var router = require("express").Router()
@@ -61,11 +62,19 @@ function loginCheck(req, res, next){
     if (req.user){
         next()
     } else {
-        res.send("로그인 해주세요. <a href=\"/diary/login\">로그인</a>")
+        res.render("login.ejs")
     }
 }
 router.get("/mypage", loginCheck, (req, res)=>{
     res.render("mypage.ejs", {userSession: req.user})
+})
+
+router.get("/main", loginCheck, async (req, res)=>{
+    const post = await pos.find({id: req.user.id}).toArray()
+    res.render("main.ejs", {
+        userSession: req.user,
+        post : post
+    })
 })
 
 
@@ -76,6 +85,7 @@ router.get("/mypage", loginCheck, (req, res)=>{
 router.post("/register", async (req, res)=>{
     let id = req.body.id
     let pw = req.body.pw
+    let nn = req.body.nn
 
     const saltRounds = 10
     const p = await col.findOne({id: id})
@@ -85,7 +95,7 @@ router.post("/register", async (req, res)=>{
             if (p) {
                 res.send({code: 0})
             } else {
-                col.insertOne({id: id, pw: hash})
+                col.insertOne({nn: nn, id: id, pw: hash})
                 res.send({code: 1})
             }
         } catch (err) {
@@ -97,10 +107,40 @@ router.post("/register", async (req, res)=>{
 
 
 router.post("/login", passport.authenticate("local", {
-    failureRedirect: '/member/login'
+    failureRedirect: '/diary/login'
 }), (req, res) => {
     res.send({code: 1})
 })
+
+
+router.post("/main", async(req, res)=>{
+    try {
+        let code = req.body.code
+        let id = req.user.id
+        let _id = req.body._id
+        let title = req.body.title
+        let content = req.body.content
+        let date = req.body.date
+
+        if (code == 2){
+            await pos.deleteOne({
+                _id: new ObjectId(_id)
+            })
+        } else {
+            await pos.insertOne({
+                id: id,
+                title: title,
+                content: content,
+                date: date
+            })
+        }
+            res.send({code: 1})
+        } catch {
+            res.send({code: 2})
+        }
+})
+
+
 
 
 module.exports = router

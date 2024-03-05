@@ -16,7 +16,9 @@ const server_port = process.env.SERVER_PORT;
 const db_uri = 'mongodb+srv://' + db_id + ':' + db_pw + '@' + db_cluster + '.zpxsdxo.mongodb.net/?retryWrites=true&w=majority';
 const client = new MongoClient(db_uri)
 const db = client.db("backendtest")
+const db2 = client.db("diary")
 global.col = db.collection("login")
+global.pos = db2.collection("post")
 
 
 app.listen(server_port, () => {

@@ -6,16 +6,20 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
-        <title>backendtest2</title>
+        <title>My Diary</title>
     </head>
     <body>
 
-        <h1> hihihi </h1>
+        <h1> My Diary </h1>
 
         <div class="container mt-4">
             <form action="/register" method="POST">
                 <fieldset>
                     <legend>회원가입</legend>
+                    <div class="md-3">
+                        <label for="nn" class="form-label">닉네임</label>
+                        <input type="text" id="nn" class="form-control" name="nn">
+                    </div>
                     <div class="md-3">
                         <label for="id" class="form-label">아이디</label>
                         <input type="text" id="id" class="form-control" name="id">
@@ -38,15 +42,16 @@
             $("#register").click(()=>{
                 const id = $("#id").val()
                 const pw = $("#pw").val()
+                const nn = $("#nn").val()
 
                 $.ajax({
-                    url: "/member/register",
+                    url: "/diary/register",
                     method: "POST",
-                    data: {id: id, pw: pw},
+                    data: {id: id, pw: pw, nn: nn},
                 }).done((result)=>{
                     if (result.code == 1){
-                        alert(id + " 님 환영합니다!")
-                        location.href = "/member/login"
+                        alert(nn + " 님 환영합니다!")
+                        location.href = "/diary/login"
                     } else {
                         alert("이미 가입된 아이디입니다.")
                         $("#id").focus()

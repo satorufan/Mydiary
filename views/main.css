@@ -1,0 +1,74 @@
+body{
+    /*background-color: rgb(67, 67, 67);*/
+    background-image: url(https://i.pinimg.com/originals/7c/94/81/7c9481188e1e70c09658c5bc706e7d9b.gif);
+    background-size: 1600px;
+    background-repeat: no-repeat;
+}
+
+.main{
+    display: grid;
+    grid-template-columns: 1fr 400px 1fr;
+    margin-top: 50px;
+    height: 50px;
+    .header{
+        padding-top: 10px;
+        background-color: rgb(74, 0, 75);
+        font-size: 20px;
+        color: rgb(253, 253, 253);
+        text-align: center;
+        height: 115%;
+    }
+}
+
+.content{
+    display: grid;
+    grid-template-columns: 1fr 400px 1fr;
+    height: 550px;
+    text-align: center;
+
+    .detail{
+        background-color: rgb(240, 255, 255, 0.8);
+    }
+
+    .content_elem{
+        margin-top: 5px;
+        margin-left: 3%;
+        margin-right: 3%;
+        border: solid black 1px;
+        border-radius: 5px;
+        text-align: left;
+        line-height: 30px;
+        background-color: white;
+        display: grid;
+        grid-template-columns: 80px 190px 50px 50px;
+    }
+    
+    .content-elem-date{
+        border-right: 1px solid black;
+        border-right-style: dashed;
+        font-size: 12px;
+    }
+
+    .content-elem-title{
+        padding-left: 5%;
+        font-size: 12px;
+    }
+    
+    .btn{
+        text-align: center;
+        font-size: 12px;
+    }
+
+    #add{
+        margin-top: 10px;
+    }
+}
+
+
+#md-3-content{
+    padding-top: 30px;
+    height: 300px;
+    .form-control{
+        height: 80%;
+    }
+}
