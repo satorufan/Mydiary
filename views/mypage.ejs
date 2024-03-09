@@ -3,18 +3,125 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link href="mypage.css" rel="stylesheet">
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
         <title>My Diary</title>
     </head>
     <body>
 
-        <h1> <%= userSession.id %>님의 마이페이지 </h1>
+        <h1></h1>
+
+        <div class="user_info">
+            <div></div>
+            <div class="user_main">
+                <div class="user_name">
+                    <div></div>
+                    <div class="user_nickname">
+                        <div class="name">ㅤ이름</div>
+                        <div class="name_content" name="text"><%= userSession.nn %> </div>
+                        <input class="edit_name" value="<%= userSession.nn %>">
+                    </div>
+                    <div></div>
+                </div>
+
+                <div class="user_id">
+                    <div></div>
+                    <div class="user_id_detail">
+                        <div class="id">ㅤ아이디</div>
+                        <div class="id_content"><%= userSession.id %></div>
+                    </div>
+                    <div></div>
+                </div>
+
+                <div class="user_pw">
+                    <div></div>
+                    <div class="user_pw_detail">
+                        <div class="pw">ㅤ비밀번호</div>
+                        <div class="pw_content" type="password"><%= "*".repeat(userSession.pw.length) %></div>
+                        <input class="edit_pw" type="password" value="<%= userSession.pw %>">
+                    </div>
+                    <div></div>
+                </div>
+
+                <div class="button-area">
+                    <div></div>
+                    <button method="POST" type="button" class="btn btn-primary" id="edit" onclick=EditButton("<%= userSession._id %>")>수정</button>
+                    <button type="button" class="btn btn-primary" id="logout">로그아웃</button>
+                    <button type="button" class="btn btn-primary" id="back">뒤로</button>
+                    <div></div>
+                </div>
+            </div>
+            <div></div>
+        </div>
 
 
         <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous">
+        </script>
+        <script>
+            $(".edit_pw").mouseover(()=>{
+                $(".edit_pw").prop("type", "")
+            })
+            $(".edit_pw").mouseout(()=>{
+                $(".edit_pw").attr("type", "password")
+            })
+
+            $("#back").click(()=>{
+                location.href = "/diary/main"
+            })
+
+            $("#logout").click(()=>{
+                location.href = "/diary/logout"
+                /*$.ajax({
+                    url: "/diary/mypage",
+                    method: "POST",
+                    data: {code: "logout"}
+                })*/
+            })
+
+            var MypageEditMode = 0
+            function EditButton(_id) {
+                if (MypageEditMode == 0){
+                    $(".name_content").hide()
+                    $(".pw_content").hide()
+                    $(".edit_name").show()
+                    $(".edit_pw").show()
+                    $("#edit").html("완료").css("background-color", "#700087")
+                    MypageEditMode = 1
+                } else {
+                    $(".name_content").show()
+                    $(".pw_content").show()
+                    $(".edit_name").hide()
+                    $(".edit_pw").hide()
+                    $("#edit").html("수정").css("background-color", "violet")
+
+                    const NickName = $(".edit_name").val()
+                    const PassWord = $(".edit_pw").val()
+
+                    $.ajax({
+                        url: "/diary/mypage",
+                        method: "POST",
+                        data: {
+                            _id: _id,
+                            nn: NickName,
+                            pw: PassWord,
+                            code: "edit"
+                        },
+                    }).done((result)=>{
+                        if (result.code == 100) {
+                            alert("다시 로그인해주세요")
+                            location.reload(true)
+                        } else {
+                            alert("수정되었습니다.")
+                            location.reload(true)
+                        }
+                    })
+
+                    MypageEditMode = 0
+                }
+            }
         </script>
     </body>
 </html>

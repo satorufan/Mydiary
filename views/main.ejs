@@ -14,7 +14,11 @@
     <body>
         <div class="main">
             <h1></h1>
-            <h1 class="header"> <%= userSession.nn %>'s Diary </h1><br/>
+            <h1 class="header"> 
+                <div></div>
+                <div> <%= userSession.nn %>'s Diary </div>
+                <div><image src="image/user.png" class="mypage" ></div>
+            </h1><br/>
             <h1></h1>
         </div>
 
@@ -51,11 +55,11 @@
         </div>
 
         <!-- 글 수정 -->
-        <div class="modal fade" id="add_elem" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal fade" id="update_elem" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h1 class="modal-title fs-5" id="exampleModalLabel">글 작성</h1>
+                        <h1 class="modal-title fs-5" id="exampleModalLabel">글 수정</h1>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
@@ -64,15 +68,15 @@
                                 <fieldset>
                                     <div class="md-3">
                                         <label for="Modal-Title" class="form-label">제목</label>
-                                        <input type="text" id="Modal-Title" class="form-control" name="Modal_Title">
+                                        <input type="text" id="Update-Modal-Title" class="form-control" name="Modal_Title">
                                     </div>
                                     <div class="md-3" id="md-3-content">
                                         <label for="Modal-Content" class="form-label">내용</label>
-                                        <textarea id="Modal-Content" class="form-control" name="Modal_Content"></textarea>
+                                        <textarea id="Update-Modal-Content" class="form-control" name="Modal_Content"></textarea>
                                     </div>
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancle</button>
-                                        <button id="upload" type="button" class="btn btn-primary">Upload</button>
+                                        <button id="update" type="button" class="btn btn-primary">Update</button>
                                     </div>
                                 </fieldset>
                             </form>
@@ -93,7 +97,7 @@
                     <div class="content_elem">
                         <div id="content-elem-date" align="center" class="content-elem-date"><%= post[i].date %></div>
                         <div class="content-elem-title"><%= post[i].title %></div>
-                        <button id="content-elem-edit" type="button" class="btn btn-light">수정</button>
+                        <button method="POST" id="content-elem-edit" type="button" class="btn btn-light" onclick = updatepost("<%= post[i]._id %>")>수정</button>
                         <button method="POST" id="content-elem-delete" type="button" class="btn btn-light" onclick = deletepost("<%= post[i]._id %>")>삭제</button>
                     </div>
                 <% } %>
@@ -107,6 +111,9 @@
         integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous">
         </script>
         <script>
+            $(".mypage").css("cursor", "pointer").click(()=>{
+                location.href = "/diary/mypage"
+            })
             // 글 추가 트리거
             $("#upload").click(()=>{
                 const title = $("#Modal-Title").val()
@@ -144,6 +151,53 @@
             })
 
 
+            //글 수정
+            var editMode = ""
+            function updatepost(postId) {
+                const post_id = postId
+                editMode = post_id
+                $.ajax({
+                    url: "/diary/main",
+                    method: "POST",
+                    data: {
+                        _id: post_id,
+                        code: 3
+                    }
+                }).done((result)=>{
+                    const editTitle = result.title
+                    const editContent = result.content
+                    var modal = new bootstrap.Modal($("#update_elem"))
+                    $("#Update-Modal-Title").val(editTitle)
+                    $("#Update-Modal-Content").val(editContent)
+                    modal.show()
+                })
+            }
+
+            $("#update").click(()=>{
+                const updateTitle = $("#Update-Modal-Title").val()
+                const updateContent = $("#Update-Modal-Content").val()
+
+                $.ajax({
+                    url: "/diary/main",
+                    method: "POST",
+                    data: {
+                        _id: editMode,
+                        title: updateTitle,
+                        content: updateContent,
+                        code: 4
+                    },
+                }).done((result)=>{
+                    if (result.code == 1){
+                        alert("수정하였습니다.")
+                        $("#Update-Modal-Title").val("")
+                        $("#Update-Modal-Content").val("")
+                        $("#update_elem").modal("hide")
+                        location.reload(true)
+                    }
+                })
+            })
+
+
             //글 삭제
             function deletepost (dataid) {
                 if (confirm("정말 삭제하시겠습니까?")){
@@ -155,7 +209,7 @@
                         _id: _id,
                         code: 2
                     }}).done((result)=>{
-                        if (result.code == 2){
+                        if (result.code == 100){
                             alert("다시 로그인 해주세요.")
                             location.reload()
                         } else {

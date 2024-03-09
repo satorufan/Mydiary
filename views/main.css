@@ -11,13 +11,19 @@ body{
     margin-top: 50px;
     height: 50px;
     .header{
+        display: grid;
+        grid-template-columns: 1fr 2fr 1fr;
         padding-top: 10px;
         background-color: rgb(74, 0, 75);
         font-size: 20px;
         color: rgb(253, 253, 253);
         text-align: center;
         height: 115%;
+        .mypage{
+            filter: invert(100%)
+        }
     }
+    
 }
 
 .content{

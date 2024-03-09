@@ -1,0 +1,124 @@
+html{
+    height: 100%;
+}
+body{
+    background-image: url(https://i.pinimg.com/originals/ae/5a/20/ae5a20cac3e79fe2a447e8a8d97d7f27.gif);
+    background-repeat: no-repeat;
+    background-size: 800px;
+    background-position: center;
+    height: 100%;
+}
+h1{
+    height: 20%;
+    text-align: center;
+}
+
+.user_info{
+    height: 75%;
+    display: grid;
+    grid-template-columns: 1fr 400px 1fr;
+
+    .user_main{
+        background-image: url(https://i.pinimg.com/564x/a9/1b/3a/a91b3a44232e0c14d3d05c8adce57189.jpg);
+        background-size: 400px;
+        background-repeat: no-repeat;
+        font-weight: 800;
+
+        .user_name{
+            display: grid;
+            grid-template-columns: 1fr 5fr 1fr;
+            height: 100px;
+            .user_nickname{
+                height: 50px;
+                border: solid #700087;
+                border-radius: 10px;
+                background-color: white;
+                margin-top: 40%;
+                display: grid;
+                grid-template-columns: 1fr 2fr;
+                .name{
+                    border-right: solid #000000 1px;
+                    padding-top: 10px;
+                }
+                .name_content{
+                    padding-left: 10px;
+                    padding-top: 10px;
+                }
+                .edit_name{
+                    display: none;
+                    border: none;
+                    width: 180px;
+                }
+            }
+        }
+
+        .user_id{
+            display: grid;
+            grid-template-columns: 1fr 5fr 1fr;
+            height: 70px;
+            .user_id_detail{
+                height: 50px;
+                border: solid #700087;
+                border-radius: 10px;
+                background-color: white;
+                margin-top: 25%;
+                display: grid;
+                grid-template-columns: 1fr 2fr;
+            }
+            .id{
+                border-right: solid black 1px;
+                padding-top: 10px;
+            }
+            .id_content{
+                padding-left: 10px;
+                padding-top: 10px;
+            }
+        }
+
+        .user_pw{
+            display: grid;
+            grid-template-columns: 1fr 5fr 1fr;
+            height: 70px;
+            .user_pw_detail{
+                height: 50px;
+                border: solid #700087;
+                border-radius: 10px;
+                background-color: white;
+                margin-top: 20%;
+                display: grid;
+                grid-template-columns: 1fr 2fr;
+            }
+            .pw{
+                border-right: solid black 1px;
+                padding-top: 10px;
+            }
+            .pw_content{
+                padding-left: 10px;
+                padding-top: 10px;
+            }
+            .edit_pw{
+                display: none;
+                border: none;
+                width: 180px;
+            }
+        }
+
+        .btn-primary {
+            font-weight: 600;
+            color: var(white);
+            background-color: violet;
+            border: solid black 2px;
+          }
+
+        .button-area{
+            text-align: center;
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+            margin-top: 24%;
+            height: 50px;
+            button{
+                width: 120px;
+            }
+        }
+    }
+}

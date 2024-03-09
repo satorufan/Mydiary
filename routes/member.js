@@ -33,10 +33,11 @@ passport.use(new LocalStrategy({
     session: true,
 }, async (input_id, input_pw, done)=>{
         const user = await col.findOne({id: input_id})
+        console.log(user)
         if (!user) {
             return done(null, false, {message: "존재하지 않는 사용자입니다."})
         }
-        const result = await bcrypt.compare(input_pw, user.pw)
+        const result = await bcrypt.compare(input_pw, user.pw_hash)
         if (result) {
             return done(null, user, {message: "로그인 성공"})
         }
@@ -77,6 +78,13 @@ router.get("/main", loginCheck, async (req, res)=>{
     })
 })
 
+router.get('/logout', function(req, res, next){
+    req.logout(function(err) {
+      if (err) { return next(err); }
+      res.redirect('/diary');
+    });
+});
+
 
 
 
@@ -85,6 +93,7 @@ router.get("/main", loginCheck, async (req, res)=>{
 router.post("/register", async (req, res)=>{
     let id = req.body.id
     let pw = req.body.pw
+    let real_pw = req.body.pw
     let nn = req.body.nn
 
     const saltRounds = 10
@@ -95,7 +104,7 @@ router.post("/register", async (req, res)=>{
             if (p) {
                 res.send({code: 0})
             } else {
-                col.insertOne({nn: nn, id: id, pw: hash})
+                col.insertOne({nn: nn, id: id, pw: real_pw, pw_hash: hash})
                 res.send({code: 1})
             }
         } catch (err) {
@@ -122,10 +131,25 @@ router.post("/main", async(req, res)=>{
         let content = req.body.content
         let date = req.body.date
 
-        if (code == 2){
+        if (code == 3) {
+            const p = await pos.findOne({
+                _id : new ObjectId(_id)
+            })
+            res.send({title: p.title, content: p.content})
+        } else if (code == 4) {
+            await pos.updateOne(
+                { _id : new ObjectId(_id) },
+                {$set: {
+                    title: title,
+                    content: content
+                }}
+            )
+            res.send({code: 1})
+        } else if (code == 2){
             await pos.deleteOne({
                 _id: new ObjectId(_id)
             })
+            res.send({code: 2})
         } else {
             await pos.insertOne({
                 id: id,
@@ -133,15 +157,47 @@ router.post("/main", async(req, res)=>{
                 content: content,
                 date: date
             })
-        }
             res.send({code: 1})
+        }
         } catch {
-            res.send({code: 2})
+            res.send({code: 100})
         }
 })
 
 
+router.post("/mypage", async (req, res)=>{
+    try{
+        let _id = req.body._id
+        let nn = req.body.nn
+        let pw = req.body.pw
 
+        if (code= "edit"){
+            const saltRounds = 10
+            bcrypt.hash(pw, saltRounds, (err, hash)=>{
+                try{
+                    col.updateOne({ _id : new ObjectId(_id) },
+                    {$set: {
+                        nn: nn,
+                        pw: pw,
+                        pw_hash: hash
+                    }})
+                    res.send({code: 1})
+        
+                } catch (err) {
+                    console.log(err)
+                }
+            })
+        } else {
+            req.logOut()
+            req.session.save(function(){
+                res.redirect('/diary');
+            })
+            res.send(1)
+        }
+    } catch {
+        res.send({code: 100})
+    }
+})
 
 module.exports = router
 
