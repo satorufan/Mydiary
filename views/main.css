@@ -11,6 +11,8 @@ body{
     margin-top: 50px;
     height: 50px;
     .header{
+        border-top-left-radius: 10px;
+        border-top-right-radius: 10px;
         display: grid;
         grid-template-columns: 1fr 2fr 1fr;
         padding-top: 10px;
@@ -20,13 +22,21 @@ body{
         text-align: center;
         height: 115%;
         .mypage{
-            filter: invert(100%)
+            filter: invert(100%);
+            padding-top: 5px
+        }
+        .diary-name{
+            padding-top: 5px;
+        }
+        #add{
+            font-size: 15px;
         }
     }
     
 }
 
 .content{
+    padding-top: 10px;
     display: grid;
     grid-template-columns: 1fr 400px 1fr;
     height: 550px;
@@ -64,9 +74,25 @@ body{
         text-align: center;
         font-size: 12px;
     }
+}
 
-    #add{
-        margin-top: 10px;
+.paging{
+    display: grid;
+    grid-template-columns: 1fr 400px 1fr;
+
+    i{
+        padding-top: 5px;
+    }
+
+    .move-page{
+        display: grid;
+        grid-template-columns: 1fr 1fr 4fr 1fr 1fr;
+        background-color: white;
+    }
+
+    .pages{
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
     }
 }
 

@@ -4,6 +4,7 @@ const LocalStrategy = require("passport-local").Strategy
 const session = require("express-session")
 const express = require("express")
 const ObjectId = require("mongodb").ObjectId
+var ls = require("local-storage")
 
 
 var router = require("express").Router()
@@ -33,7 +34,6 @@ passport.use(new LocalStrategy({
     session: true,
 }, async (input_id, input_pw, done)=>{
         const user = await col.findOne({id: input_id})
-        console.log(user)
         if (!user) {
             return done(null, false, {message: "존재하지 않는 사용자입니다."})
         }
@@ -48,10 +48,14 @@ passport.use(new LocalStrategy({
 
 
 router.get("/", (req, res)=>{
+    ls("currentPage", 1)
+    ls("currentPageFive", 0)
     res.render("index.ejs")
 })
 
 router.get("/login", (req, res)=>{
+    ls("currentPage", 1)
+    ls("currentPageFive", 0)
     res.render("login.ejs")
 })
 
@@ -63,7 +67,7 @@ function loginCheck(req, res, next){
     if (req.user){
         next()
     } else {
-        res.render("login.ejs")
+        res.redirect("/diary/login")
     }
 }
 router.get("/mypage", loginCheck, (req, res)=>{
@@ -72,9 +76,13 @@ router.get("/mypage", loginCheck, (req, res)=>{
 
 router.get("/main", loginCheck, async (req, res)=>{
     const post = await pos.find({id: req.user.id}).toArray()
+    const currentPage = ls("currentPage")
+    const currentPageFive = ls("currentPageFive")
     res.render("main.ejs", {
         userSession: req.user,
-        post : post
+        post : post,
+        current : currentPage,
+        currentFive : currentPageFive
     })
 })
 
@@ -130,6 +138,8 @@ router.post("/main", async(req, res)=>{
         let title = req.body.title
         let content = req.body.content
         let date = req.body.date
+        let page = req.body.page
+        let pageFive = req.body.pageFive
 
         if (code == 3) {
             const p = await pos.findOne({
@@ -150,6 +160,13 @@ router.post("/main", async(req, res)=>{
                 _id: new ObjectId(_id)
             })
             res.send({code: 2})
+        } else if (code == "page"){
+            ls("currentPage", page)
+            res.send({code: "pagemove"})
+        } else if (code == "pageFive") {
+            ls("currentPage", 5*pageFive + 1)
+            ls("currentPageFive", pageFive)
+            res.send({code: "pagemove"})
         } else {
             await pos.insertOne({
                 id: id,
