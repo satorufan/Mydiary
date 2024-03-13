@@ -1,13 +1,13 @@
 const express = require("express")
 const cors = require("cors")
+const { get } = require("request")
 const app = express()
 const MongoClient = require("mongodb").MongoClient
-const bcrypt = require("bcryptjs")
 require("dotenv").config()
 app.use(express.urlencoded({extended: true}))
 app.set("view engine", "ejs")
+app.use(express.static("./views"))
 app.use("/diary", require("./routes/member.js"))
-//app.use(express.static("./views"))
 
 const db_id = process.env.DB_ID;
 const db_pw = process.env.DB_PW;
