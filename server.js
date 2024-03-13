@@ -25,4 +25,6 @@ app.listen(server_port, () => {
     console.log("server on")
 })
 
-
+app.get("/", (req, res)=>{
+    res.render("index.ejs")
+})
