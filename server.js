@@ -6,6 +6,7 @@ const MongoClient = require("mongodb").MongoClient
 require("dotenv").config()
 app.use(express.urlencoded({extended: true}))
 app.set("view engine", "ejs")
+app.use(express.static("./views"))
 app.use("/diary", require("./routes/member.js"))
 
 const db_id = process.env.DB_ID;
