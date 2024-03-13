@@ -2,7 +2,7 @@ const express = require("express")
 const cors = require("cors")
 const app = express()
 const MongoClient = require("mongodb").MongoClient
-const bcrypt = require("bcrypt")
+const bcrypt = require("bcryptjs")
 require("dotenv").config()
 app.use(express.urlencoded({extended: true}))
 app.set("view engine", "ejs")
