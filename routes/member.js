@@ -53,10 +53,18 @@ router.get("/", (req, res)=>{
     res.render("index.ejs")
 })
 
-router.get("/login", (req, res)=>{
-    ls("currentPage", 1)
-    ls("currentPageFive", 0)
-    res.render("login.ejs")
+router.get("/login", async (req, res)=>{
+    try{
+        if (req.user) {
+            res.redirect("/diary/main")
+        } else {
+            ls("currentPage", 1)
+            ls("currentPageFive", 0)
+            res.render("login.ejs")
+        }
+    } catch(e) {
+        res.redirect("/diary")
+    }
 })
 
 router.get("/register", (req, res)=>{
