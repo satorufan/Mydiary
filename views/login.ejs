@@ -10,11 +10,12 @@
     </head>
     <body>
 
-        <h1 align="center"> My Diary </h1>
+        <h1 id="app-name" align="center"> My Diary </h1>
 
         <div class="block"></div>
 
         <div class="container mt-4">
+            <form></form>
             <form action="/login" method="POST">
                 <fieldset>
                     <legend>로그인</legend>
@@ -30,6 +31,7 @@
                     <a href="/diary/register" class="btn btn-success">아이디가 없나요?</a>
                 </fieldset>
             </form>
+            <form></form>
         </div>
 
         <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
@@ -53,6 +55,10 @@
                         $("#id").focus()
                     }
                 })
+            })
+
+            $("#app-name").css("cursor", "pointer").click(()=>{
+                location.href = "/diary"
             })
 
             function enterkey() {

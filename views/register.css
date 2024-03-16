@@ -3,22 +3,28 @@ html{
 }
 
 body{
-    background-image: url(https://i.pinimg.com/originals/b2/53/53/b253533421b02bfcac83c853005549bf.gif);
-    background-repeat: no-repeat;
-    background-size: 1800px;
     height: 100%;
+    width: 100%;
+    background-image: url(https://i.pinimg.com/originals/36/82/cc/3682ccb6188e4b220862b45b740a4c33.gif);
+    background-repeat: no-repeat;
+    background-size: cover;
     background-position: center;
 }
 h1{
     font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    color: aliceblue;
+    padding-top: 20px;
 }
 
 .block{
-    height: 150px;
+    height: 120px;
 }
 
 .container{
     font-weight: 1000;
+    color: rgb(229, 255, 188);
+    display: grid;
+    grid-template-columns: 1fr 8fr 1fr;
     legend{
         margin-bottom: 30px;
     }

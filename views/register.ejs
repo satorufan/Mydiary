@@ -11,30 +11,32 @@
     </head>
     <body>
 
-        <h1 align="center"> My Diary </h1>
+        <h1 id="app-name" align="center"> My Diary </h1>
 
         <div class="block"></div>
 
         <div class="container mt-4">
+            <form></form>
             <form action="/register" method="POST">
                 <fieldset>
                     <legend>회원가입</legend>
                     <div class="md-3">
-                        <label for="nn" class="form-label">닉네임</label>
+                        <label for="nn" class="form-label">닉네임 (최소 4자)</label>
                         <input type="text" id="nn" class="form-control" name="nn">
                     </div>
                     <div class="md-3">
-                        <label for="id" class="form-label">아이디</label>
+                        <label for="id" class="form-label">아이디 (최소 6자)</label>
                         <input type="text" id="id" class="form-control" name="id">
                     </div>
                     <div class="md-3">
-                        <label for="pw" class="form-label">비밀번호</label>
+                        <label for="pw" class="form-label">비밀번호 (최소 8자)</label>
                         <input type="password" id="pw" class="form-control" name="pw">
                     </div>
                     <button id="register" type="button" class="btn btn-dark">회원가입</button>
                     <a href="/diary/login" class="btn btn-primary">뒤로</a>
                 </fieldset>
             </form>
+            <form></form>
         </div>
 
         <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
@@ -47,19 +49,27 @@
                 const pw = $("#pw").val()
                 const nn = $("#nn").val()
 
-                $.ajax({
-                    url: "/diary/register",
-                    method: "POST",
-                    data: {id: id, pw: pw, nn: nn},
-                }).done((result)=>{
-                    if (result.code == 1){
-                        alert(nn + " 님 환영합니다!")
-                        location.href = "/diary/login"
-                    } else {
-                        alert("이미 가입된 아이디입니다.")
-                        $("#id").focus()
-                    }
-                })
+                if (id.length >= 5 && pw.length >= 8 && nn.length >= 4){
+                    $.ajax({
+                        url: "/diary/register",
+                        method: "POST",
+                        data: {id: id, pw: pw, nn: nn},
+                    }).done((result)=>{
+                        if (result.code == 1){
+                            alert(nn + " 님 환영합니다!")
+                            location.href = "/diary/login"
+                        } else {
+                            alert("이미 가입된 아이디입니다.")
+                            $("#id").focus()
+                        }
+                    })
+                } else {
+                    alert("잘못된 형식입니다.")
+                }
+            })
+
+            $("#app-name").css("cursor", "pointer").click(()=>{
+                location.href = "/diary"
             })
         </script>
     </body>
